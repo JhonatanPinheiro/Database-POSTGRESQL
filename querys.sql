@@ -2407,3 +2407,36 @@ CREATE AGGREGATE median(NUMERIC)(
 
 SELECT ROUND(MEDIAN(QTD),2) AS MEDIANA
 FROM MAQUINA;
+
+
+SELECT MEDIAN(QTD) AS MEDIANA
+FROM MAQUINA
+WHERE MAQUINA = 'Maquina 01';
+
+SELECT MEDIAN(QTD) AS MEDIANA
+FROM MAQUINA
+WHERE MAQUINA = 'Maquina 02';
+
+SELECT MEDIAN(QTD) AS MEDIANA
+FROM MAQUINA
+WHERE MAQUINA = 'Maquina 03';
+
+
+
+-----------------
+-----------------
+INSERT INTO MAQUINA (maquina,dia,qtd) VALUES
+  ('Maquina 01',11,15.9),
+  ('Maquina 02',11,15.4),
+  ('Maquina 03',11,15.7), 
+  ('Maquina 01',12,30),
+  ('Maquina 02',12,24),
+  ('Maquina 03',12,45);
+
+
+DELETE FROM MAQUINA 
+WHERE DIA =  12 OR DIA = 11;
+
+
+
+------------------------131.14    COEFICIENTE DE VARIAÇÃO --------------
