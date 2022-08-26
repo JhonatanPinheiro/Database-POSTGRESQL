@@ -2375,7 +2375,7 @@ ORDER BY 4 DESC;
 
 
 
---------------------13 MEDIANA-----------------
+--------------------130. 13 MEDIANA-----------------
 
 /*
 DESVIO PADRÃO E VARIANCIA
@@ -2440,3 +2440,43 @@ WHERE DIA =  12 OR DIA = 11;
 
 
 ------------------------131.14    COEFICIENTE DE VARIAÇÃO --------------
+
+
+/*FUNÇÃO E ANALISE DA MEDIANA NO ARQUIVO 02 - FUNCAO DE MEDIANA.sql*/
+
+
+/*
+QUANTIDADE
+TOTAL
+MEDIA
+MÁXIMO
+MÍNIMO
+AMPLITUDE  
+VARIANCIA
+DESVIO PADRAO
+COEFICIENTE DE VARIAÇÃO
+
+*/
+
+SELECT MAQUINA,
+       ROUND (COUNT(QTD),2) AS "QUANTIDADE",
+       ROUND (SUM(QTD),2) AS "SOMA - TOTAL",
+       ROUND (AVG(QTD),2) AS "MÉDIA",
+       ROUND (MAX(QTD),2) AS "MÁXIMO",
+       ROUND (MIN(QTD),2) AS "MÍNIMO",
+       ROUND (MAX(QTD),2) - MIN(QTD) AS "AMPLITUDE TOTAL",
+       ROUND (VAR_POP(QTD),2) AS "VARIANCIA",
+       ROUND (STDDEV_POP(QTD),2) AS "DESVIO PADRAO",
+       ROUND (MEDIAN(QTD),2) AS "MEDIANA",
+       ROUND ((STDDEV_POP(QTD) / AVG(QTD)) * 100,2) AS "COEFICIENTE VARIAÇÃO"       
+FROM MAQUINA
+GROUP BY MAQUINA 
+ORDER BY 1;
+
+
+
+
+-----------------------------------------------132. 15 Moda---------------------------
+-- MODA - NODE()
+
+
