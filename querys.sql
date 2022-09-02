@@ -2477,6 +2477,171 @@ ORDER BY 1;
 
 
 -----------------------------------------------132. 15 Moda---------------------------
--- MODA - NODE()
+-- MODA - MODE() WITHIN GROUP(ORDER BY COLUNA)
+DELETE FROM MAQUINA 
+WHERE DIA = 11 OR DIA = 12;
 
 
+-- SELECT MODE() WITHIN GROUP(ORDER BY COLUNA)
+--Essa Query tem a finalidade de fazer a moda porém está sendo feito de forma úninca sem está sendo separado  por máquina por exemplo: Moda das Maquinas 1,Maquina 2 e Maquinas 3 sem está separadas ! 
+SELECT MODE() WITHIN GROUP(ORDER BY QTD) AS "MODA" FROM MAQUINA; -- Calculando a moda
+
+
+-- Essa Query tem finalidade de fazer a moda porém está sendo agrupado por maquinas a moda Exemplo: Moda da Maquinas 1, Moda das Máquinas 2 e Mode das Máquinas 3
+SELECT MAQUINA, MODE() WITHIN GROUP(ORDER BY QTD) AS "MODA"
+FROM MAQUINA
+GROUP BY MAQUINA;
+
+
+-- Essa Query está completa com todos as informações: Quantidade,Total,Média,Máximo,Mínimo,Amplitude Total,Variancia, Desvio Padrão, Mediana, Coeficiente Variação e Moda !
+
+SELECT MAQUINA,
+       ROUND (COUNT(QTD),2) AS "QUANTIDADE",
+       ROUND (SUM(QTD),2) AS "SOMA - TOTAL",
+       ROUND (AVG(QTD),2) AS "MÉDIA",
+       ROUND (MAX(QTD),2) AS "MÁXIMO",
+       ROUND (MIN(QTD),2) AS "MÍNIMO",
+       ROUND (MAX(QTD),2) - MIN(QTD) AS "AMPLITUDE TOTAL",
+       ROUND (VAR_POP(QTD),2) AS "VARIANCIA",
+       ROUND (STDDEV_POP(QTD),2) AS "DESVIO PADRAO",
+       ROUND (MEDIAN(QTD),2) AS "MEDIANA",
+       ROUND ((STDDEV_POP(QTD) / AVG(QTD)) * 100,2) AS "COEFICIENTE VARIAÇÃO",
+       MODE() WITHIN GROUP(ORDER BY QTD) AS "MODA"     
+FROM MAQUINA
+GROUP BY MAQUINA 
+ORDER BY 1;
+
+
+
+----------------------------------------------------------------------------133. 16 Export Formato Colunar---------------------------------------------------------
+-- Formato Colunar (É um arquivo de formato cvs)
+-- Nome do Arquivo: LogMaquinas
+CREATE TABLE GENERO(
+  IDGENERO INT PRIMARY KEY,
+  NOME VARCHAR(40)
+);
+
+INSERT INTO GENERO (IDGENERO, NOME) VALUES(1,'FANTASIA'),
+                                          (2,'AVENTURA'),
+                                          (3,'SUSPENDE'),
+                                          (4,'AÇÃO'),
+                                          (5,'DRAMA');
+
+
+CREATE TABLE FILME(
+  IDFILME INT PRIMARY KEY,
+  NOME VARCHAR(50),
+  ANO INT,
+  ID_GENERO INT,
+  FOREIGN KEY(ID_GENERO)
+  REFERENCES GENERO(IDGENERO)
+);
+
+INSERT INTO FILME (IDFILME,NOME,ANO,ID_GENERO) VALUES(100,'KILL BILL',2087,2),
+                                                     (200,'DRACULA',1098,3),
+                                                     (300,'SENHOR DOS ANEIS',2008,1),
+                                                     (400,'UM SONHO DE LIBERDADE', 2008,5),
+                                                     (500,'OS BAD BOYS',2008,4),
+                                                     (600,'GUERRA CIVIL',2016,2),
+                                                     (700,'CADILLAC RECORDS',2009,5),
+                                                     (800,'O HOBBIT',2008,1),
+                                                     (900,'TOMATES VERDES FRITOS',2008,5),
+                                                     (1000,'CORRRIDA MORTAL',2008,4);
+
+
+CREATE TABLE LOCACAO(
+  IDLOCACAO INT PRIMARY KEY,
+  DATA DATE,
+  MIDIA INT,
+  DIAS INT,
+  ID_FILME INT,
+  FOREIGN KEY(ID_FILME)
+  REFERENCES FILME(IDFILME)
+);
+
+
+INSERT INTO LOCACAO (IDLOCACAO, DATA, MIDIA,DIAS,ID_FILME)VALUES (1,'01/08/2019',23,3,100),
+                                                                 (2,'01/02/2019',56,1,400),
+                                                                 (3,'02/07/2019',23,3,400),
+                                                                 (4,'02/02/2019',43,1,500),
+                                                                 (5,'02/02/2019',23,2,100),
+                                                                 (6,'03/07/2019',76,3,700),
+                                                                 (7,'03/02/2019',45,1,700),
+                                                                 (8,'04/08/2019',89,3,100),
+                                                                 (9,'04/08/2019',23,3,800),
+                                                                 (10,'05/07/2019',23,3,800),
+                                                                 (11,'05/02/2019',38,3,800),
+                                                                 (12,'01/02/2019',56,1,400),
+                                                                 (13,'06/12/2019',23,3,400),
+                                                                 (14,'01/02/2019',56,2,300),
+                                                                 (15,'02/02/2019',23,2,400),
+                                                                 (16,'03/07/2019',76,3,100),
+                                                                 (17,'03/02/2015',45,1,200),
+                                                                 (18,'04/08/2014',89,3,300),
+                                                                 (19,'04/08/2012',23,3,400),
+                                                                 (20,'05/07/2014',23,3,1000),
+                                                                 (21,'09/07/2010',38,3,1000),
+                                                                 (22,'23/08/2019',56,1,400),
+                                                                 (23,'25/04/2019',23,3,400),
+                                                                 (24,'02/02/2019',43,1,1000),
+                                                                 (25,'05/12/2019',23,2,500),
+                                                                 (26,'05/01/2019',76,3,600),
+                                                                 (27,'05/09/2019',45,1,200),
+                                                                 (28,'08/08/2019',89,3,200),
+                                                                 (29,'01/08/2019',23,3,400),
+                                                                 (30,'28/07/2019',23,3,200),
+                                                                 (31,'20/05/2019',38,3,900);
+
+
+
+-- FAZENDO UMA QUERY PARA TRAZER TODOS OS DADOS DAS TABELAS: GENERO, FILME E LOCACAO
+SELECT F.NOME,G.NOME,L.DATA,L.DIAS,L.MIDIA 
+FROM GENERO G 
+INNER JOIN FILME F
+ON G.IDGENERO = F.ID_GENERO 
+INNER JOIN LOCACAO L
+ON L.ID_FILME = F.IDFILME;
+
+
+/*PODEMOS CRIAR UMA TABELA COM O RESULTADO DE UMA QUERY E ESSA FORMA DE REALIZAR UMA MODELAGEM COLUNA */
+CREATE TABLE REL_LOCADORA  AS 
+SELECT F.NOME AS FILME,G.NOME AS GENERO,L.DATA AS DATA ,L.DIAS AS DIAS,L.MIDIA AS MIDIA 
+FROM GENERO G 
+INNER JOIN FILME F
+ON G.IDGENERO = F.ID_GENERO 
+INNER JOIN LOCACAO L
+ON L.ID_FILME = F.IDFILME;   
+
+
+
+-- COMANDO MUITO USADO PARA CIENTISTA DE DADOS 
+
+/*
+COPY TO EXPORTA
+COPY FROM IMPORTA
+*/
+/*
+Explicando melhor o comando:
+
+COPY nome_da_tabela TO
+'caminho_onde_está_o_caminho_até_o_arquivo\nome_do_arquivo.csv'
+DELIMITER 'meu_delimiter_que_informa_que_é_um_novo_registro'
+CSV HEADER
+*/
+-- Nesse comando foi coletados todos os dados que estava no arquivo chamado REL_LOCADORA.csv e jogado (alimentado) para a tabela REL_LOCADORA
+COPY REL_LOCADORA TO 
+'C:\Users\jhonatan.pinheiro\Downloads\REL_LOCADORA.csv'
+DELIMITER ';'
+CSV HEADER;
+
+
+-----------------------------------------------------------134. 17 Arquitetura do Ambiente----------------------------------------------------------
+---- O que é um campo FLAG?
+--Resposta:  É um campo único e que eu tenho como comparar se ele está aqui e não aqui 
+
+
+
+----------------------------------------------------------136. 19 Programando a Sincronização---------------------------------------
+/*VAMOS DEIXAR ESSE PROCEDIMENTO POR MEIO DE UMA TRIGGER */
+
+ 
