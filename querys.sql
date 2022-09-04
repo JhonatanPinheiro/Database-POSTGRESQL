@@ -2774,9 +2774,100 @@ FOR EACH ROW
 
    
 /*INSERINDO NOVOS REGISTROS PARA TESTA NOSSA TRIGGER CRIADA*/
-INSERT INTO LOCACAO VALUES (NFXTVAL('SEQ_LOCACAO'),NOW(),100,7,300);
+INSERT INTO LOCACAO VALUES (NEXTVAL('SEQ_LOCACAO'),NOW(),100,7,300);
 
+INSERT INTO LOCACAO VALUES (NEXTVAL('SEQ_LOCACAO'),NOW(),500,1,200);
+INSERT INTO LOCACAO VALUES (NEXTVAL('SEQ_LOCACAO'),NOW(),800,6,500);
 
 SELECT * FROM LOCACAO;
 SELECT * FROM RELATORIO_LOCADORA;
  
+
+-------------------------------------------------------------------------------------FAZER NOVAMENTE O 137 20 SINCRONIANDO REGISTROS DELETADOS------------------------------------
+ -----------------------------------------------------------------------------------137. 20 Sincronizando Registros Deletados------------------------------------------
+DELETE FROM LOCACAO WHERE IDLOCACAO = X
+
+
+CREATE OR REPLACE FUNCTION DELETE_LOCACAO()
+RETURNS TRIGGER AS 
+$$
+BEGIN
+
+DELETE FROM RELATORIO_LOCADORA 
+WHERE IDLOCACAO  = OLD.IDLOCACAO;
+  
+COPY RELATORIO_LOCACAO TO 'C:\Users\jhonatan.pinheiro\Downloads\RELATORIO_LOCADORA.csv'
+DELIMITER ';' 
+CSV HEADER;
+RETURN OLD;
+END;
+$$
+LANGUAGE PLPGSQL;
+
+CREATE TRIGGER DELETE_REG
+BEFORE DELETE ON LOCACAO
+FOR EACH ROW
+EXECUTE PROCEDURE DELETE_LOCACAO();
+
+
+SELECT * FROM LOCACAO; 
+
+SELECT * FROM RELATORIO_LOCADORA;
+
+DELETE FROM LOCACAO WHERE IDLOCACAO = 1;
+
+
+--------------------------------------138. 21 Exercício - Salários----------------------------------------------------------------
+
+-- QUALA MODA DOS SALARIOS.  A MODA DOS SALARIOS DIZ ALGO DE RELEVANTE?
+-- QUAL A MODA DEPARTAMENTAL  = QUAL O DEPARTAMENTO QUE MAIS EMPREGA?
+-- QUAL DESVIO PADRAO DE CADA DEPARTAMENTO
+-- CALCULE E MEDIANA SALARIAL DE TODO O SET DE DADOS 
+-- QUAL A AMPLITUDE DE TODOS OS SALARIOS 
+-- CALCULE AS PRINCIPAIS MEDIDAS ESTASTISTICAS POR DEPARTAMENTO
+-- QUAL DEPARTAMENTO TE DÁ UM MAIOR PROBABILIDADE DE GANHAR MAIS  ? --OUTDOOR
+
+
+
+-------------------------------------------------139. 22 Machine Learning - Criando colunas Dummy--------------------------------
+
+--VARIAVEL DUMMY PARA MACHINE LEARNING 
+--Em estatística ou econometria, particularmente na análise de regressão, uma variável Dummy é aquela que toma o valor de "zero" ou "um" indicando a ausência ou presença de qualidades ou atributos. Essas variáveis são usadas como dispositivos para classificar dados em categorias mutuamente exclusivas.
+
+/*
+Variáveis dummy são variáveis binárias (0 ou 1) criadas para representar uma variável com duas ou mais categorias.
+
+Por exemplo, se quiséssemos incluir a variável sexo em um modelo de regressão linear teríamos que transformar artificialmente a variável sexo em uma variável dummy, deste modelo teríamos:
+
+dummy_sexo = 1 em caso de sexo feminino
+dummy_sexo = 0 em caso de sexo masculino
+Em um caso de variável com 3 ou mais categorias, seria necessário criar sempre n-1 dummies, por exemplo no caso de incluir a variável estado (considerando que a base tem apenas os estados de São Paulo, Rio de Janeiro e Minas Gerais) no modelo teríamos:
+
+dummy_SP: 1 quando São Paulo e 0 nos demais
+dummy_RJ: 1 quando Rio de Janeiro e 0 nos demais
+Perceba que o número de variáveis dummies a serem criadas sempre sera n-1 categorias, e isso acontece pois a ultima variável será a exclusão das demais. Neste exemplo o fator MG acontece quando dummy_SP e dummy_RJ for 0.
+
+Na modelagem, a utilização da variável dummy irá permitir a captação da diferença do valor esperado entre categorias, ou seja, o coeficiente (Beta) do modelo será o valor médio que determinada categoria representa. No exemplo dos estados, a não criação da variável da dummy de Minas Gerais é possível pois o valor médio que esta categoria representa estará associada ao intercepto do modelo, e o peso das variáveis dummy_SP e dummy_RJ será considerada sempre em relação as observações de MG.
+
+Quando usar?
+As variáveis dummys devem ser utilizadas sempre que desejarmos incluir variáveis categóricas em modelos que aceitam apenas variáveis numéricas.
+
+Um ponto de atenção que deve-se tomar quando se cria as variáveis dummys é com variáveis que aparentam ser numéricas mas na verdade são categóricas. O caso mais comum para este tipo de ocorrência ocorre quando a base de dados utiliza codificação para categorias.
+
+No caso da utilização da codificação das categorias (Ex.: 1= SP, 2=RJ, 3=MG) na modelagem, o modelo será enviesado arbitrariamente pela relação entre os códigos ( neste exemplo, MG seria equivalente a 3 vezes São Paulo). Vale destacar que a escala likert (Ex: 1=muito ruim, 2=ruim, 3=médio,4=bom,5=muito bom) também é um caso de codificação de categorias, e a ponderação de que “muito bom” é 5x maior que “muito ruim” é uma ponderação feita de forma arbitraria, portanto neste tipo de caso também deve-se utilizar a variável dummy.
+
+*/
+
+ 
+
+ -- ULTILIZANDO O CASE
+ SELECT NOME,SEXO FROM FUNCIONARIOS ;
+
+ SELECT NOME,CARGO,
+ CASE
+  WHEN CARGO = 
+ END AS "CONDIÇÕES"
+
+  
+
+   
