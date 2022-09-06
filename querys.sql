@@ -23,7 +23,7 @@ SHOW DATESTYLE;
 -- Lembrando que muitos dados estão com o formato de data diferente. Teremos que fazer essa alteração. 
 
 -- Aprendendo a fazer a alteração de data no banco de dados 
--- Localizar onde está instalado o banco de dados, entrar na pasta de nome PostSQL -> 14 -> Data -> localizar o arquivo postgresql -> Click para editar esse arquivo -> Procuro as seguintes informações : datestyle = 'iso',dmy -> Ao localizar copie essa linha e coloque como comentario -> Na linha de baixo cole mais uma vez.Nesse linha que colamos deveremos colocar o formato de data que queremos dmy . -> ao escolher o formato desejado iremos salvar -> Depois ir em serviços do windowns caso esteja usando esse sistema operacional. -> Localizamos o serviço -> Clicamos com o botão direito e reinicioar o serviço! Pronto 
+-- Localizar onde está instalado o banco de dados, entrar na pasta de nome PostSQL -> 14 -> Data -> localizar o arquivo postgresql.conf -> Click para editar esse arquivo -> Procuro as seguintes informações : datestyle = 'iso, dmy' -> Ao localizar copie essa linha e coloque como comentario -> Na linha de baixo cole mais uma vez.Nesse linha que colamos deveremos colocar o formato de data que queremos dmy . -> ao escolher o formato desejado iremos salvar  (LEMBRANDO: dmy formato Brasileiro / mdy formato Americano)-> Depois ir em serviços do windowns caso esteja usando esse sistema operacional. -> Localizamos o serviço -> Clicamos com o botão direito e reinicioar o serviço! Pronto 
 
 
 
@@ -1090,6 +1090,17 @@ create table funcionarios
       idRegiao int,
       primary key (idFuncionario)
   );
+
+------------ Lembrando se estamos inserindo esses dados lembre-se se seu banco está no formato de data certa, caso não esteja segue as configurações e tutorial citado acima já!
+-- Caso não esteja o erro será esse (+ou-):
+/*
+		ERROR:  date/time field value out of range: "10/28/2022"
+LINE 1: ...001,'TESTE','teste@teste.com','Masculino','teste','10/28/202...
+                                                             ^
+HINT:  Perhaps you need a different "datestyle" setting.
+SQL state: 22008
+Character: 85	
+*/
 
 insert into funcionarios values (1,'Kelley','rkelley0@soundcloud.com','Feminino','Computadores','10/2/2009',67470,'Structural Engineer',2);
 insert into funcionarios values (2,'Armstrong','sarmstrong1@infoseek.co.jp','Masculino','Esporte','3/31/2008',71869,'Financial Advisor',2);
@@ -2865,8 +2876,11 @@ No caso da utilização da codificação das categorias (Ex.: 1= SP, 2=RJ, 3=MG)
 
  SELECT NOME,CARGO,
  CASE
-  WHEN CARGO = 
- END AS "CONDIÇÕES"
+  WHEN CARGO = 'Financial Advisor'
+ END AS "CONDICOES"
+
+
+ SELECT CARGO FROM FUNCIONARIOS;
 
   
 
