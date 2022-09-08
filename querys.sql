@@ -2874,14 +2874,256 @@ No caso da utilização da codificação das categorias (Ex.: 1= SP, 2=RJ, 3=MG)
  -- ULTILIZANDO O CASE
  SELECT NOME,SEXO FROM FUNCIONARIOS ;
 
+ 
  SELECT NOME,CARGO,
  CASE
-  WHEN CARGO = 'Financial Advisor'
- END AS "CONDICOES"
+        WHEN CARGO = 'Financial Advisor' THEN 'Condicao 01'
+        WHEN CARGO = 'Structural Engineer' THEN 'Condicao 02'
+        WHEN CARGO = 'Executive Secretary' THEN 'Condicao 03'
+        WHEN CARGO = 'Sales Associative' THEN 'Condicao 04'
+        ELSE 'Outras Condições'
+  END AS "Condições"
+  FROM funcionarios;
 
-
- SELECT CARGO FROM FUNCIONARIOS;
+   SELECT CARGO FROM FUNCIONARIOS;
 
   
+   SELECT NOME,
+   CASE
+        WHEN SEXO = 'Masculino' THEN 'M'
+        WHEN SEXO = 'Feminino' THEN 'F'
+        ELSE 'DEFAULT'
+    END AS "SEXO"
+    FROM FUNCIONARIOS;
 
-   
+
+
+-- UTILIZANDO VALORES BOOLEANOS
+-- Estou fazendo com que todos os sexo que seja feminino e masculino seja projetado em outra tabela de forma booleana (true OU false)
+SELECT NOME,CARGO,(SEXO = 'Masculino') AS Masculino,(SEXO = 'Feminino') AS Feminino
+FROM FUNCIONARIOS;
+
+
+-- MESCRANDO AS TECNICAS - VARIABLE DUMMY PYTHON
+-- Estou fazendo com que todos os sexo que esteja feminino e masculino seja projetado em outra tabela de forma booleana (treu OU false). Além disso estará pegando esse valores booleanos e conventendo em valores 1 (true) OU 0 (false)
+SELECT NOME,CARGO,
+CASE    
+    WHEN (SEXO = 'Masculino') = true THEN 1
+    ELSE 0
+END AS "MASCULINO",
+CASE    
+    WHEN (SEXO = 'Feminino') = true THEN 1
+    ELSE 0
+END AS "FEMININO"
+FROM FUNCIONARIOS;
+
+
+-- A Mesma Query de cima porém de forma profissional !
+SELECT NOME,CARGO,
+CASE    
+    WHEN (SEXO = 'Masculino') THEN 1
+    ELSE 0
+END AS "MASCULINO",
+CASE    
+    WHEN (SEXO = 'Feminino')  THEN 1
+    ELSE 0
+END AS "FEMININO"
+FROM FUNCIONARIOS;
+
+
+----------------------------------------------------------------------------140 23 Introdução aos  Filtros ---------------------------------------------------
+
+/*FILTROS DE GRUPOS*/
+
+---------------------------------------------------- Filtros Baseados em Valores númericos 
+SELECT NOME,DEPARTAMENTO,SALARIO
+FROM FUNCIONARIOS
+WHERE SALARIO > 10000;
+
+
+---------------------------------------------------/*Filtros Baseados em STRING*/
+SELECT NOME,DEPARTAMENTO,SALARIO
+FROM FUNCIONARIOS
+WHERE DEPARTAMENTO = 'FERRAMENTAS';
+
+SELECT NOME,DEPARTAMENTO,SALARIO
+FROM FUNCIONARIOS
+WHERE DEPARTAMENTO = 'Ferramentas';
+
+--Obs: FIltros são CaseSensitive. 
+------ Coluna não são CaseSensitive
+
+SELECT NOME,DEPARTAMENTO,SALARIO
+FROM FUNCIONARIOS
+WHERE DEPARTAMENTO = 'Ferramentas'
+AND 
+SALARIO > 10000;
+
+------------------------------------------/*Filtros Baseados em Unico TIPO e COLUNA --------> Atenção para a Regra do AND e OR    CONSIDERAR OR e AND*/
+
+SELECT NOME,DEPARTAMENTO,SALARIO
+FROM FUNCIONARIOS
+WHERE DEPARTAMENTO = 'Ferramentas'
+AND 
+DEPARTAMENTO = 'Books' ;
+
+-- OBS: Em Relacionamentos 1 x 1 o filtro AND tratando de uma única coluna sempre dará Falso*/
+
+
+-----------------------------------------------------/*Filtros baseados em padrão de Caracteres */
+SELECT DEPARTAMENTO, SUM(SALARIO) AS "TOTAL"
+FROM FUNCIONARIOS
+WHERE DEPARTAMENTO LIKE 'B%'
+GROUP BY DEPARTAMENTO;
+
+SELECT DEPARTAMENTO, SUM(SALARIO) as "TOTAL"
+FROM FUNCIONARIOS
+WHERE DEPARTAMENTO LIKE 'Bo%'
+GROUP BY DEPARTAMENTO;
+
+SELECT DEPARTAMENTO, SUM(SALARIO) as "TOTAL"
+FROM FUNCIONARIOS
+WHERE DEPARTAMENTO LIKE 'B%s' ---Comece com: B  -> qualquer coisa ->  termine com s
+GROUP BY DEPARTAMENTO;
+
+
+
+
+/* Se eu quisesse filtrar o agrupamento pelo salario por exemplo, maior que 40.000.000*/
+
+--Colunas não agregadas WHERE    
+--Colunas agregadas HAVING  onde ele entra depois do GROUP BY
+------- Podemos usar os Dois: Colunas não agregadas usamos WHERE e Colunas agregadas usamos HAVING  (onde ele entra: depois do GROUP BY  -> Exemplos Abaixo) 
+
+-- Query comum mostrando a soma de salarios por departamento
+SELECT DEPARTAMENTO, SUM(SALARIO) AS "TOTAL"
+FROM FUNCIONARIOS
+WHERE DEPARTAMENTO LIKE 'B%'
+GROUP BY DEPARTAMENTO;
+
+
+------------ Query de forma lógica porém errada, mostrará um erro por conta que não conseguimos fazer a soma dos salarios com a função SUM usando WHERE pois contém Colunas agregadas 
+SELECT DEPARTAMENTO, SUM(SALARIO) AS "TOTAL"
+FROM FUNCIONARIOS
+WHERE DEPARTAMENTO LIKE 'B%' AND SUM(SALARIO) > 4000000000
+GROUP BY DEPARTAMENTO;
+
+--------ERRO
+/*ERROR:  aggregate functions are not allowed in WHERE
+LINE 4: WHERE DEPARTAMENTO LIKE 'B%' AND SUM(SALARIO) > 4000000000
+                                         ^
+SQL state: 42803
+Character: 98
+*/
+
+
+-- Query De forma Correta usando HANVING para Colunas agreagadas   (HAVINGG = Tendo)
+SELECT DEPARTAMENTO, SUM(SALARIO) AS "TOTAL"
+FROM FUNCIONARIOS
+WHERE DEPARTAMENTO LIKE 'B%'
+GROUP BY DEPARTAMENTO
+HAVING SUM(SALARIO) > 4900000;
+-- Mostre para mim o departamento mais sua soma dos departamentos da tabela funcionarios. Onde departamento começa com a letra B e qualquer coisas. Agrupando por Departamento. Tendo a soma dos departamento maior que 4900000
+
+
+
+
+
+-------------------------------------------------------------------141 24 Filtros de Contadores -------------------------------------------
+
+-- Multiplos Contadores COUNT()
+SELECT COUNT(*) FROM FUNCIONARIOS;
+
+-- Esse COUNT funciona porém está errado o resultado !  Cuidado da forma como vai usar !
+SELECT COUNT(*) AS "Quantidade Total",
+COUNT('Masculino') AS "Masculino"
+FROM FUNCIONARIOS;
+
+-- Query ok . Está contando quantos funcionarios Masculinos tem
+SELECT SEXO,COUNT(*)
+FROM FUNCIONARIOS 
+WHERE SEXO = 'Masculino'
+GROUP BY SEXO;
+
+
+-- Não funciona  . Lembrando que COUNT é função de Agregação
+SELECT COUNT(*) AS "Quantidade Total",
+COUNT(SELECT SEXO, COUNT(*)
+FROM FUNCIONARIOS
+WHERE SEXO = 'Masculino'
+GROUP BY SEXO) AS "Masculino"
+FROM FUNCIONARIOS;
+
+
+-- Query ok, está trazendo a quantidade total de sexo e também quantidade dos funcionarios do sexo Masculino.
+-- Lembrando que dessa forma prejudica a performace do banco
+SELECT COUNT(*) AS "Quantidade Total",
+(SELECT COUNT(*)
+FROM FUNCIONARIOS
+WHERE SEXO = 'Masculino'
+GROUP BY SEXO) AS "Masculino"
+FROM FUNCIONARIOS;
+
+
+
+-- Forma fácil de fazer isso  usando FILTER
+SELECT COUNT(*) AS "QUANTIDADE TOTAL",
+COUNT(*) FILTER(WHERE SEXO = 'Masculino') AS "MASCULINO"
+FROM FUNCIONARIOS;
+
+-- Fazendo contando total de funcionarios, contando quantidade de funcionarios Masculinos e funcionarios do sexo feminino
+SELECT COUNT(*) AS "QUANTIDADE TOTAL",
+COUNT(*) FILTER(WHERE SEXO = 'Masculino') AS "MASCULINO",
+COUNT(*) FILTER(WHERE SEXO = 'Feminino') AS "FEMININO"
+FROM FUNCIONARIOS;;
+
+/*Lembrando que o FILTER só funciona com o COUNT*/
+SELECT COUNT(*) AS "QUANTIDADE TOTAL",
+COUNT(*) FILTER(WHERE SEXO = 'Masculino') AS "MASCULINO",
+COUNT(*) FILTER(WHERE SEXO = 'Feminino') AS "FEMININO",
+COUNT(*) FILTER(WHERE DEPARTAMENTO = 'Esporte' AND sexo = 'Feminino') AS "Mulheres do ESPORTES"
+FROM FUNCIONARIOS;
+
+
+
+-----------------------------------------------------------------------142 25 FORMATANDO Strings-------------------------------------------
+/*Reformatando Strings*/
+-- Listando 
+SELECT DEPARTAMENTO FROM FUNCIONARIOS;
+
+
+/*Usando DISTICT*/
+-- DISTINCT serve para distiguir (Não repetindo)
+SELECT DISTINCT DEPARTAMENTO FROM FUNCIONARIOS;
+
+/*Usando UPPER CASE para transforma (trazer) em maiusculos*/
+SELECT DISTINCT UPPER(DEPARTAMENTO) FROM FUNCIONARIOS;
+
+/*Usando UPPER CASE para transforma (trazer) em minisculos*/
+SELECT DISTINCT LOWER(DEPARTAMENTO) FROM FUNCIONARIOS;
+
+
+/* Concatenando Strings*/
+SELECT CARGO || '-' || DEPARTAMENTO
+FROM FUNCIONARIOS;
+
+SELECT CARGO || '-' || DEPARTAMENTO AS "CONCATENACAO DA TABELA CARGO E DEPARTAMENTO"
+FROM FUNCIONARIOS;
+
+
+SELECT UPPER CARGO || '-' || DEPARTAMENTO AS "CONCATENACAO DA TABELA CARGO E DEPARTAMENTO"
+FROM FUNCIONARIOS;
+
+/*Removendo Espaços -------------- */
+SELECT '                 UNINDO DADOS            ';
+
+-- Contando caracteres  LENGTH
+SELECT LENGTH ('                 UNINDO DADOS            ');
+
+
+-- APlicando TRIM -> Tira os espaços
+SELECT TRIM('                 UNINDO DADOS            ');
+
+-- Posso utilizar dessa forma , porém tem um detalhe ele tirou os espaços dos lados esquerdo e direito o espaço do meio onde fica UNINDO DADOS foi contado. Ou seja 12 posições
+
+SELECT LENGTH(TRIM('                 UNINDO DADOS            '));
