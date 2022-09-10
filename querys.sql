@@ -3127,3 +3127,65 @@ SELECT TRIM('                 UNINDO DADOS            ');
 -- Posso utilizar dessa forma , porém tem um detalhe ele tirou os espaços dos lados esquerdo e direito o espaço do meio onde fica UNINDO DADOS foi contado. Ou seja 12 posições
 
 SELECT LENGTH(TRIM('                 UNINDO DADOS            '));
+
+
+
+
+/*DESAFIO - CRIAR UMA COLUNA AO LADO DA COLUNA CARGO QUE DIGA SE A PESSOA È ASSISTENTE OU NÂO*/
+
+-- ETAPA 1
+SELECT CARGO FROM FUNCIONARIOS;
+
+--ETAPA 2
+-- Puxando as informações e convertendo todos os dados para lower (minusculos)
+SELECT NOME,CARGO,LOWER(CARGO) AS "PERTENCE ASSISTANT"
+FROM FUNCIONARIOS;
+
+--ETAPA 3
+-- Puxando a quantidade de funcionarios que está como assistant no cargo
+SELECT COUNT(*),
+COUNT(*) FILTER(WHERE CARGO LIKE '%ssistant%') AS "QTD_Assistant"
+FROM FUNCIONARIOS;
+
+--ETAPA 4
+-- Puxando informações somente de quem tem assistant  no cargo
+SELECT NOME,CARGO,LOWER(CARGO) AS "PERTECE ASSISTANT"
+FROM FUNCIONARIOS
+WHERE CARGO LIKE '%ssistant%';
+
+--ETAPA 5
+-- Puxando as informações nome,cargo. Foi feito a conversão de todas as informações para LOWER e dessa forma tratei os dados de forma booleana dizendo que quem tem "assistant" no cargo será true (1) e false para (0)
+SELECT NOME,CARGO,LOWER(CARGO) AS "PERTECE ASSISTANT",
+CASE 
+    WHEN (CARGO LIKE '%ssistant%') THEN 1
+    ELSE 0
+END AS "ASSISTENTE"
+FROM FUNCIONARIOS;
+
+
+
+
+-- ETAPA FINAL -> QUERY COMPLETA COM OS RESULTADOS
+SELECT NOME,CARGO,LOWER(CARGO) AS "PERTECE ASSISTANT",
+CASE 
+    WHEN (CARGO LIKE '%ssistant%') THEN 1
+    ELSE 0
+END AS "ASSISTENTE"
+CASE 
+  
+FROM FUNCIONARIOS;
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
