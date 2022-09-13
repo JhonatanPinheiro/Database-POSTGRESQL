@@ -3163,7 +3163,7 @@ END AS "ASSISTENTE"
 FROM FUNCIONARIOS;
 
 
-
+--------------------------------------------------RESPOSTA DO DESAFIO---------------------------
 
 -- ETAPA FINAL -> QUERY COMPLETA COM OS RESULTADOS
 SELECT NOME,CARGO,LOWER(CARGO) AS "PERTECE ASSISTANT",
@@ -3176,13 +3176,18 @@ CASE
 FROM FUNCIONARIOS;
 
 
+--------------------------------------------------Correção do DESAFIO ---------------------------
+-- Query para verificação do true e false. Se o cargo do funcionarios tiver Assistant será true. Caso contrario False
+SELECT NOME,CARGO,(CARGO LIKE '%Assistant') AS "ASSISTANTE?"
+FROM FUNCIONARIOS;
 
-
-
-
-
-
-
+-----------------------------------
+--Query para verificação 1 e 0 . Se o cargo do funcionarios tiver Assistant será 1. Caso contrario 0
+SELECT NOME,CARGO,
+CASE WHEN (CARGO LIKE '%Assistant') = TRUE THEN 1
+ELSE 0
+END AS "ASSISTENTE?"
+FROM FUNCIONARIOS;
 
 
 
