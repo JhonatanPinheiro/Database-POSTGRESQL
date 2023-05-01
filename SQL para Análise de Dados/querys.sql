@@ -264,3 +264,9 @@ FROM sales.customers
 WHERE professional_status = 'clt'
 
 
+-- RESUMO
+-- 1 Servem para comprar dois valores retornando TRUE ou FALSE
+-- 2 Muito utilizado em conjunto com a função WHERE para filtrar linhas de uma seleção
+-- 3 Utilizados para criar colunas Flag que retornem TRUE ou FALSE
+-- 4 Utilize o Guia de comandos para consultar os operadores utilizados no SQL   
+
