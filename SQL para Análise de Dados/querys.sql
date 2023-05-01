@@ -270,3 +270,120 @@ WHERE professional_status = 'clt'
 -- 3 Utilizados para criar colunas Flag que retornem TRUE ou FALSE
 -- 4 Utilize o Guia de comandos para consultar os operadores utilizados no SQL   
 
+
+-------------------------- 16. Operadores de comparação ----------------------------------
+-- Uso do comando BETWEEN
+-- Seleciona veículos que custam entre 100k e 200k na tabela products
+SELECT * FROM sales.products
+WHERE price >= 100000 AND price <= 200000;
+
+SELECT * FROM sales.products
+WHERE price BETWEEN 10000 AND 200000; 
+
+-- Uso do comando NOT
+-- Selecione veículos que custam abaixo de 100k ou acima 200k
+SELECT * FROM sales.products
+WHERE  price < 100000 OR price > 200000;
+
+SELECT * FROM sales.products 
+WHERE price NOT BETWEEN 100000 AND 200000;
+
+-- Uso do comando IN
+-- Selecionar produtos que sejam da marca HONDA, TOYOTA ou RENAULT
+SELECT * FROM sales.products
+WHERE brand IN('HONDA','TOYOTA','RENAULT');
+
+SELECT * FROM  sales.products
+WHERE brand = 'HONDA' OR brand = 'TOYOTA' OR brand = 'RENAULT';
+
+
+-- Selecionar produtos que NÃO sejam da marca HONDA, TOYOTA ou RENAULT
+SELECT * FROM sales.products
+WHERE brand NOT IN('HONDA','TOYOTA','RENAULT');
+
+
+-- Uso do comando LIKE (matchs imperfeitos)
+-- Selecione os primeiros nomes distintos da tabela customers que começam com as iniciais ANA
+SELECT DISTINCT c.first_name FROM sales.customers c
+WHERE first_name LIKE('ANA%');
+
+
+-- Uso do comando ILIKE (ignora letras maiúsculas e minúculas)
+-- Selecione os primeiros nomes distintos com iniciais 'ana'
+SELECT DISTINCT c.first_name FROM sales.customers c
+WHERE first_name ILIKE('ana%');
+
+-- Uso do comando IS NULL
+-- Selecionar apenas as linhas que contém nulo no campo "population" na tabela temp_tables.regions
+SELECT * FROM temp_tables.regions
+WHERE population IS NULL;
+
+-- Lembrando que o comando a baixo não funciona. Devemos sempre usar o IS NULL, dessa forma ele mostrará os/todos campos vazios
+SELECT * FROM temp_tables.regions
+WHERE population = NULL;
+
+--RESUMO
+-- 1 Usados para unir expressões simples em uma composta
+-- 2 AND: Verifica se duas comparações são simultaneamente verdadeiras
+-- 3 OR: Verifica se uma ou outra comparação é verdadeiras
+-- 4 BETWEEN: Verifica quais valores estão dentro do range definido
+-- 5 IN: Funciona como multiplos ORs
+-- 6 LIKE e ILIKE: Comparam textos e são sempre utilizados em conjunto com o operador %, que funciona como coringa, indicando que qualquer texto pode aparecer no lugar do campo
+-- 7 ILIKE ignora se o campo tem letras maiúsculas ou minúsculas na camparação
+-- 8 IS NULL: Verifica se o campo é nulo
+-- 9 Utilize o Guia de comandos para consultar os operadores utilizados no SQL
+
+
+-------------------------- 18. Desafios ----------------------------------
+-- (Exercício 1) Calcule quantos salários mínimos ganha cada cliente da tabela 
+-- sales.customers. Selecione as colunas de: email, income e a coluna calculada "salários mínimos"
+-- Considere o salário mínimo igual à R$1200
+SELECT email,income,(income/1200) AS "Quantidade de Salário Minimo" 
+FROM sales.customers;
+
+SELECT email, professional_status,CONCAT('R$ ',income), ROUND(income/1200,3) AS "Quantidade de Salário Minimo" 
+FROM sales.customers
+ORDER BY income DESC;
+
+
+
+-- (Exercício 2) Na query anterior acrescente uma coluna informando TRUE se o cliente
+-- ganha acima de 5 salários mínimos e FALSE se ganha 4 salários ou menos.
+-- Chame a nova coluna de "acima de 4 salários"
+SELECT email, professional_status,CONCAT('R$ ', income), ROUND(income/1200,2) AS "Quantidade de Salario Minimo", (((income/1200) > 5) = TRUE) AS "Acima de 5 Salarios minimos"
+FROM sales.customers
+ORDER BY income ASC;
+
+SELECT email,income,(income/1200) AS "Quantidade de Salário Minimo",(((income/1200) > 5) = TRUE) AS "Acima de 5 Salarios minimos"
+FROM sales.customers;
+
+
+-- (Exercício 3) Na query anterior filtre apenas os clientes que ganham entre
+-- 4 e 5 salários mínimos. Utilize o comando BETWEEN
+SELECT email, professional_status,CONCAT('R$ ', income), (income/1200) AS "Quantidade de Salario Minimo", (((income/1200) > 5) = TRUE) AS "Acima de 5 Salarios minimos"
+FROM sales.customers
+WHERE (income/1200) BETWEEN 4 AND 5
+ORDER BY income ASC;
+
+SELECT email, professional_status,CONCAT('R$ ', income),(income/1200) AS "Quantidade de Salario Minimo", (((income/1200) > 5) = TRUE) AS "Acima de 5 Salarios minimos"
+FROM sales.customers
+WHERE (income/1200) BETWEEN 4 AND 5
+ORDER BY income ASC;
+
+select *, ROUND(income/1200,0) AS "Quantidade de Salario Minimo" FROM sales.customers
+WHERE (income/1200) BETWEEN 4 AND 5
+ORDER BY income ASC;
+
+
+-- (Exercício 4) Selecine o email, cidade e estado dos clientes que moram no estado de 
+-- Minas Gerais e Mato Grosso. 
+
+
+
+-- (Exercício 5) Selecine o email, cidade e estado dos clientes que não 
+-- moram no estado de São Paulo.
+
+
+
+-- (Exercício 6) Selecine os nomes das cidade que começam com a letra Z.
+-- Dados da tabela temp_table.regions
