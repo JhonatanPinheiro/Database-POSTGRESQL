@@ -377,13 +377,32 @@ ORDER BY income ASC;
 
 -- (Exercício 4) Selecine o email, cidade e estado dos clientes que moram no estado de 
 -- Minas Gerais e Mato Grosso. 
+SELECT email, city,state
+FROM sales.customers
+WHERE state IN('MG','MT') 
+ORDER BY state DESC;
 
-
+SELECT email, city,state
+FROM sales.customers
+WHERE state = 'MG' OR state = 'MT'
+ORDER BY state DESC;
 
 -- (Exercício 5) Selecine o email, cidade e estado dos clientes que não 
 -- moram no estado de São Paulo.
+SELECT email, city,state
+FROM sales.customers
+WHERE state IN('MG','MT') 
+ORDER BY state DESC;
 
+SELECT email, city,state
+FROM sales.customers
+WHERE state = 'MG' OR state = 'MT'
+ORDER BY state DESC;
 
 
 -- (Exercício 6) Selecine os nomes das cidade que começam com a letra Z.
 -- Dados da tabela temp_table.regions
+SELECT city,state
+FROM sales.customers
+WHERE 	city ILIKE('Z%')
+ORDER BY state DESC;
