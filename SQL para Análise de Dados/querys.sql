@@ -406,3 +406,12 @@ SELECT city,state
 FROM sales.customers
 WHERE 	city ILIKE('Z%')
 ORDER BY state DESC;
+
+
+-------------------------- 19. Funções de agregação ----------------------------------
+-- COUNT()
+
+-- Contagem de todas as linhas de uma tabela
+-- Conte todas as visitas realizadas no site da empresa fictícia
+SELECT COUNT(*) FROM sales.funnel;  
+
