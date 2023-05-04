@@ -510,12 +510,56 @@ Pois, o comando GROUP BY quando é usado sozinho ele funciona como um comando DI
 usar o comando DISTINCT por boas práticas
 */
 
-
 --RESUMO
 -- (1) Serve para agrupar registros semelhante de uma coluna
 -- (2) Normalmente utilizado em conjunto com as funções de agregação
 -- (3) Pode-se referenciar a coluna a ser agrupada pela sua posição ordinal
 --     Ex: GROUP BY 1,2,3 irá agrupar pelas 3 primeiras colunas da tabela
 -- (4) O GROUP BY sozinho funciona como um DISTINCT, eliminando linha duplicadas
+
+
+----------------------------------------21. HAVING--------------------------------
+-- OBS: A função HAVING serve tanto para fazer um filtro em colunas agregadas e não agregadas
+-- (1#) Seleção com filtro no HAVING
+-- Calcule o nª de clientes por estado filtrando apenas estados acima de 100 clientes
+SELECT state,
+       COUNT(*)
+FROM sales.customers
+-- WHERE COUNT(*) > 100     --Comando WHERE não funciona quando temos que filtrar em funções agregadas. Utilizamos HAVING
+GROUP BY state
+HAVING COUNT(*) > 100;
+
+
+SELECT state,
+       COUNT(*)
+FROM sales.customers
+GROUP BY state
+HAVING COUNT(*) > 220;
+
+--
+
+-- (1) Seleção com filtro no HAVING e WHERE
+-- Calcule o nª de clientes por estado diferente  de MG e filtrando apenas estados acima de 100 clientes
+SELECT state, COUNT(*)
+FROM sales.customers
+WHERE state <> 'MG'
+GROUP BY state
+HAVING COUNT(*) > 100;
+
+
+-- (1##) Seleção com filtro no HAVING e WHERE
+-- Calcule o nª de clientes por estado diferente  de MG e filtrando apenas estados acima de 100 clientes. Colocando em ordem organizada pela coluna state
+SELECT state, COUNT(*)
+FROM sales.customers
+WHERE state <> 'MG'
+GROUP BY state
+HAVING COUNT(*) > 100 OR COUNT(*) = 1
+ORDER BY COUNT(*)
+
+
+-- RESUMO
+-- (1) Tem a mesma função do WHERE mas pode ser usado para filtrar os resultados
+-- das funções agregadas enquanto o WHERE possui essa limitação
+-- (2) A função HAVING também pode filtrar colunas não agregadas
 
 
