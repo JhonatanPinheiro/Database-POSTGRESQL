@@ -412,6 +412,110 @@ ORDER BY state DESC;
 -- COUNT()
 
 -- Contagem de todas as linhas de uma tabela
--- Conte todas as visitas realizadas no site da empresa fictícia
-SELECT COUNT(*) FROM sales.funnel;  
+--(1) Conte todas as visitas realizadas no site da empresa fictícia
+SELECT COUNT(*) FROM sales.funnel;
+
+
+--(2) Conte todos os pagamentos registrados na tabela sales.funnel
+SELECT COUNT(paid_date)
+FROM sales.funnel;
+-- Quando o campo está vazio (NULL), a função COUNT ela não conta esses campos
+-- Resultado foi 3788 linhas
+
+SELECT * FROM SALES.funnel
+WHERE paid_date IS NULL;
+-- Resultado de todos os campos NULL: 26792 linhas
+
+
+--(3) Contagem distintas de uma coluna
+-- Conte todos os produtos distintos visitados em jan/2021
+SELECT COUNT(DISTINCT  product_id)
+FROM sales.funnel
+WHERE visit_page_date BETWEEN '2021-01-01' AND '2021-01-31'
+-- Lebrando para contar algo usando o DISTINCT devemos usar ele dentro da função a apontando para qual coluna ele fazerá a conta . Caso o DISTICT seja colocado fora nesse caso ele contará os produtos repetidos
+-- 136 produtos sem repetir
+
+SELECT DISTINCT  product_id, visit_page_date 
+FROM sales.funnel
+WHERE visit_page_date BETWEEN '2021-01-01' AND '2021-01-31'
+-- Like não funciona quando estamos falando de datas. Quando tipo primitivo do banco é date
+-- 692 linhas
+
+SELECT DISTINCT  product_id, visit_page_date 
+FROM sales.funnel
+WHERE visit_page_date BETWEEN '2021-01-01' AND '2021-01-31'
+-- 692 linhas
+
+
+
+-- OUTRAS FUNÇÔES
+--(4) Calcule o preço mínimo, máximo e médio dos productos da tabela products
+SELECT MIN(price),MAX(price), AVG(price)
+FROM sales.products
+
+SELECT MIN(price) AS "Preço minimo", MAX(price) AS "Price Maximo", AVG(price) AS "Preço medio de todos os Produtos"
+FROM sales.products
+
+--(5) Informe qual é o veículo mais caro da tabela products
+SELECT MAX(price) 
+FROM sales.products;
+
+SELECT * FROM sales.products
+WHERE price = (SELECT MAX(price) 
+FROM sales.products);
+
+
+--RESUMO
+--(1) Servem para executar operações aritmética nos registros de uma coluna
+--(2) Funções agregadas não computam cédulas vazias (NULL) como zero
+--(3) Na função COUNT() pode-se utilizar o asterisco (*) para contar os registros
+--(4) COUNT(DISTINCT) irá contar apenas os valores exclusivos
+
+
+---------------------------------------------20. GROUP BY--------------------------------
+-- Contagem agrupada de uma coluna
+-- (1) Calcule o n» de cliente da tabela customers por estado
+SELECT COUNT(*) FROM sales.customers;
+
+SELECT state , COUNT(*) as contagem FROM sales.customers
+GROUP BY state
+ORDER BY contagem DESC;
+
+
+-- (2) Contagem agrupada de varias colunas
+-- Calcule o n« de clientes por estado e status profissional
+SELECT state , professional_status,COUNT(*) as contagem FROM sales.customers
+GROUP BY state, professional_status
+ORDER BY contagem DESC;
+
+
+SELECT state , professional_status,COUNT(*) as contagem FROM sales.customers
+GROUP BY 1, 2
+ORDER BY contagem DESC;
+
+
+
+-- (3) Seleção de valores distintos
+-- Selecione os estados distintos na tabela customers utilizando o group by
+SELECT state FROM sales.customers
+GROUP BY state;
+
+SELECT DISTINCT state
+FROM sales.customers
+GROUP BY state;
+
+/*
+OBS: Tanto o comando de cima como o comando de baixo entrega os mesmo dados e Quantidade
+Pois, o comando GROUP BY quando é usado sozinho ele funciona como um comando DISTINCT e também sua funcionalidade. Mas é sempre bom
+usar o comando DISTINCT por boas práticas
+*/
+
+
+--RESUMO
+-- (1) Serve para agrupar registros semelhante de uma coluna
+-- (2) Normalmente utilizado em conjunto com as funções de agregação
+-- (3) Pode-se referenciar a coluna a ser agrupada pela sua posição ordinal
+--     Ex: GROUP BY 1,2,3 irá agrupar pelas 3 primeiras colunas da tabela
+-- (4) O GROUP BY sozinho funciona como um DISTINCT, eliminando linha duplicadas
+
 
