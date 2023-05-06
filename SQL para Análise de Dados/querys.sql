@@ -563,3 +563,55 @@ ORDER BY COUNT(*)
 -- (2) A função HAVING também pode filtrar colunas não agregadas
 
 
+----------------------------------------22. Desafio--------------------------------
+
+-- (Exercício 1) Conte quantos clientes da tabela sales.customers tem menos de 30 anos
+SELECT  COUNT(*)  AS "Quantidade de Clientes"
+FROM sales.customers;
+--  Resultado: 25109
+
+
+-- (Exercício 2) Informe a idade do cliente mais velho e mais novo da tabela sales.customers
+SELECT MIN(EXTRACT(YEAR FROM AGE(current_date, birth_date))) AS "IDADE MINIMA"
+FROM sales.customers;
+--I A função "EXTRACT()" é usada para extrair o ano da diferença entre a data atual e a data de nascimento, que é calculada pela função "AGE()".
+--II A função "AGE()" retorna a diferença entre a data atual (current_date) e a data de nascimento (birth_date) em anos, meses e dias. No entanto, a função "EXTRACT()" é usada 
+
+
+-- (Exercício 3) Selecione todas as informações do cliente mais rico da tabela sales.customers
+-- (possívelmente a resposta contém mais de um cliente)
+
+SELECT customer_id, name, email, MAX(score) AS max_score
+FROM sales.customers
+GROUP BY customer_id, name, email
+HAVING MAX(score) = (SELECT MAX(score) FROM sales.customers);
+/*
+Nessa consulta, a cláusula HAVING foi adicionada para filtrar os 
+resultados para mostrar somente as linhas com o valor máximo de score. A função MAX(score) 
+é usada para obter o valor máximo de score na tabela "customers". A cláusula HAVING é usada 
+para filtrar os resultados para mostrar somente as linhas que possuem o valor máximo de score. Note que
+a cláusula HAVING deve ser usada depois da cláusula GROUP BY, para filtrar os resultados após o agrupamento.
+*/
+
+-- (Exercício 4) Conte quantos veículos de cada marca tem registrado na tabela sales.products
+-- Ordene o resultado pelo nome da marca
+SELECT COUNT(*) AS "Quantidade de Carros", brand
+FROM sales.products
+GROUP BY brand
+ORDER BY brand DESC;
+
+
+-- (Exercício 5) Conte quantos veículos existem registrados na tabela sales.products
+-- por marca e ano do modelo. Ordene pela nome da marca e pelo ano do veículo
+SELECT COUNT(*)  AS "Qtd_veículo", brand, model_year
+FROM sales.products
+GROUP BY brand, model_year;
+
+
+-- (Exercício 6) Conte quantos veículos de cada marca tem registrado na tabela sales.products
+-- e mostre apenas as marcas que contém mais de 10 veículos registrados
+SELECT COUNT(*)  AS "Qtd_veículo", brand, model_year
+FROM sales.products
+GROUP BY brand, model_year
+HAVING COUNT(*) >  10;
+-- 0  Linhas, pois não tem marcas que contém mais de 10 veículos registrados
