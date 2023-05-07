@@ -619,4 +619,6 @@ HAVING COUNT(*) >  10;
 
 
 ----------------------------------------24. Tipos de JOIN--------------------------------
-
+-- (1) Utilize o LEFT JOIN para fazer JOIN entre as tabelas:  temp_tables_1 , temp.tamble_2
+SELECT * FROM temp_tables.tabela_1;
+SELECT * FROM temp_tables.tamble_2/
