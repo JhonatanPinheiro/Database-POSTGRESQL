@@ -615,3 +615,8 @@ FROM sales.products
 GROUP BY brand, model_year
 HAVING COUNT(*) >  10;
 -- 0  Linhas, pois não tem marcas que contém mais de 10 veículos registrados
+
+
+
+----------------------------------------24. Tipos de JOIN--------------------------------
+
