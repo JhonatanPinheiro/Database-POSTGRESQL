@@ -621,4 +621,80 @@ HAVING COUNT(*) >  10;
 ----------------------------------------24. Tipos de JOIN--------------------------------
 -- (1) Utilize o LEFT JOIN para fazer JOIN entre as tabelas:  temp_tables_1 , temp.tamble_2
 SELECT * FROM temp_tables.tabela_1;
-SELECT * FROM temp_tables.tamble_2/
+SELECT * FROM temp_tables.tabela_2;
+
+SELECT t1.cpf,t1.name, t2.state
+FROM temp_tables.tabela_1 AS t1
+LEFT JOIN temp_tables.tabela_2 AS t2
+ON t1.cpf = t2.cpf;
+
+/*O comando LEFT JOIN é utilizado para combinar duas tabelas baseado em uma coluna em comum entre elas, 
+chamada de chave primária.
+
+Note que o uso do LEFT JOIN é útil quando se quer retornar todas as linhas da tabela da esquerda
+(temp_tables.tabela_1) e apenas as linhas da tabela da direita (temp_tables.tabela_2) que correspondem 
+à condição de junção especificada. Se não houver correspondência, a coluna da tabela da direita será 
+preenchida com valores nulos (NULL).*/
+
+-- (2) Utilize o INNER JOIN para fazer JOIN entre as tabelas:  temp_tables_1 , temp.tamble_2
+SELECT t1.cpf,t1.name, t2.state
+FROM temp_tables.tabela_1 AS t1
+INNER JOIN temp_tables.tabela_2 AS t2
+ON t1.cpf = t2.cpf;
+
+/*Ao usar o INNER JOIN, apenas as linhas que possuem correspondência em ambas as tabelas serão 
+retornadas. Em outras palavras, a junção ocorrerá apenas quando houver valores em ambas as 
+tabelas que sejam iguais na coluna "cpf"
+
+É importante lembrar que o INNER JOIN é uma junção bastante utilizada quando queremos buscar 
+informações que só existem nas duas tabelas e não queremos perder dados. Caso não haja 
+correspondência na tabela 2, a linha correspondente da tabela 1 não será retornada.*/
+
+-- (3) Utilize o  RIGHT JOIN para fazer JOIN entre as tabelas:  temp_tables_1 , temp.tamble_2
+SELECT * FROM temp_tables.tabela_2;
+SELECT * FROM temp_tables.tabela_1;
+
+SELECT t1.cpf,t1.name, t2.cpf, t2.state	
+FROM temp_tables.tabela_1 AS t1
+RIGHT JOIN temp_tables.tabela_2 AS t2
+ON t1.cpf = t2.cpf
+
+/*A cláusula RIGHT JOIN é utilizada para selecionar todas as linhas da tabela à 
+direita (tabela_2) e as correspondentes da tabela à esquerda (tabela_1), quando houver
+uma correspondência na chave primária definida na condição ON.
+
+No exemplo fornecido, a consulta irá selecionar todas as linhas da tabela_2 e as 
+correspondentes da tabela_1 onde a chave primária (cpf) é a mesma em ambas as tabelas.
+
+O resultado final terá quatro colunas: cpf e name da tabela_1 e cpf e state da tabela_2. 
+Se não houver correspondência entre as tabelas, os valores da tabela_1 serão nulos.*/
+
+-- (4) Utilize o  FULL JOIN para fazer JOIN entre as tabelas:  temp_tables_1 , temp.tamble_2
+SELECT t1.cpf,t1.name, t2.cpf, t2.state	
+FROM temp_tables.tabela_1 AS t1
+FULL JOIN temp_tables.tabela_2 AS t2
+ON t1.cpf = t2.cpf
+
+/*O FULL JOIN é uma combinação de LEFT JOIN e RIGHT JOIN, que retorna todas as linhas
+de ambas as tabelas, incluindo as que não possuem correspondências nas outras tabelas. Quando 
+uma linha não possui correspondência na outra tabela, os valores NULL são retornados para
+as colunas da tabela ausente.*/
+
+
+------------------------------------------25. Exemplos---------------------------------
+--------------------------------------Exercícios----------------------------------
+-- EXERCÍCIOS ########################################################################
+
+
+-- (Exemplo 1) Identifique qual é o gênero mais frequente nos clientes que compraram1
+-- automóveis no site. Obs: Utilizar a tabela temp_tables.ibge_genders
+select * from temp_tables.ibge_genders limit 10;
+
+-- (Exemplo 2) Identifique de quais regiões são os clientes que mais visitam o site
+-- Obs: Utilizar a tabela temp_tables.regions
+select * from sales.customers limit 10;
+select * from temp_tables.regions limit 10;
+
+
+
+
