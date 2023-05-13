@@ -810,3 +810,6 @@ SELECT * FROM  temp_table.products_2;
 SELECT * FROM sales.products
 UNION ALL
 SELECT * FROM  temp_tables.products_2;
+
+
+--------------------------------------------30. Tipos de Subquery-------------------------------------
