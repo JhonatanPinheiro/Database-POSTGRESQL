@@ -761,6 +761,42 @@ LEFT JOIN temp_tables.regions AS reg
 GROUP BY reg.size
 ORDER BY contagem;
 
+--------------------------------------------28. Tipos de Union-------------------------------------
+
+/********************************UNION
+UNION: A cláusula UNION em SQL é usada para combinar o resultado de duas
+ou mais consultas SQL em um único conjunto de resultados. É importante notar 
+que a cláusula UNION só é usada para combinar resultados de consultas que têm a 
+mesma estrutura de coluna, ou seja, as mesmas colunas e tipos de dados.
+Nessa sintaxe, as duas consultas selecionam as mesmas colunas de duas tabelas 
+diferentes (table1 e table2)e as combinam em um único conjunto de resultados.
+
+A cláusula UNION remove automaticamente quaisquer linhas duplicadas que aparecem nos resultados 
+de ambas as consultas. Se você quiser incluir essas linhas duplicadas, use a cláusula UNION ALL em 
+vez de UNION.
+*/
+
+SELECT column1, column2, ... FROM table1
+UNION
+SELECT column1, column2, ... FROM table2
 
 
+/******************************UNION ALL
+ UNION ALL: A cláusula UNION ALL em SQL é semelhante à cláusula UNION, mas não remove as
+ linhas duplicadas que aparecem nos resultados de ambas as consultas. Em vez disso, a cláusula 
+ UNION ALL combina todos os resultados das consultas, incluindo as linhas duplicadas.
+
+ Nessa sintaxe, as duas consultas selecionam as mesmas colunas de duas tabelas diferentes (table1 e table2) e as combinam em um único conjunto de resultados, sem remover as linhas duplicadas.
+
+A cláusula UNION ALL pode ser útil em casos em que você deseja incluir todas as linhas das duas consultas,
+mesmo que existam linhas duplicadas. Isso pode ser útil, por exemplo, ao combinar dados de várias fontes 
+ou ao realizar análises de dados em que as linhas duplicadas podem ser importantes para a análise.
+
+No entanto, é importante lembrar que a cláusula UNION ALL pode resultar em um conjunto de resultados 
+maior do que o necessário, o que pode afetar negativamente o desempenho da consulta. Portanto, é 
+importante avaliar cuidadosamente se a cláusula UNION ALL é apropriada para sua situação específica.
+*/
+SELECT column1, column2, ... FROM table1
+UNION ALL
+SELECT column1, column2, ... FROM table2
 
