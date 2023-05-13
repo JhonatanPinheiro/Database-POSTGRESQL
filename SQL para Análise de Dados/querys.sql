@@ -657,7 +657,7 @@ SELECT * FROM temp_tables.tabela_1;
 SELECT t1.cpf,t1.name, t2.cpf, t2.state	
 FROM temp_tables.tabela_1 AS t1
 RIGHT JOIN temp_tables.tabela_2 AS t2
-ON t1.cpf = t2.cpf
+ON t1.cpf = t2.cpf;
 
 /*A cláusula RIGHT JOIN é utilizada para selecionar todas as linhas da tabela à 
 direita (tabela_2) e as correspondentes da tabela à esquerda (tabela_1), quando houver
@@ -673,7 +673,7 @@ Se não houver correspondência entre as tabelas, os valores da tabela_1 serão 
 SELECT t1.cpf,t1.name, t2.cpf, t2.state	
 FROM temp_tables.tabela_1 AS t1
 FULL JOIN temp_tables.tabela_2 AS t2
-ON t1.cpf = t2.cpf
+ON t1.cpf = t2.cpf;
 
 /*O FULL JOIN é uma combinação de LEFT JOIN e RIGHT JOIN, que retorna todas as linhas
 de ambas as tabelas, incluindo as que não possuem correspondências nas outras tabelas. Quando 
@@ -686,25 +686,81 @@ as colunas da tabela ausente.*/
 -- EXERCÍCIOS ########################################################################
 
 
--- (Exemplo 1) Identifique qual é o gênero mais frequente nos clientes que compraram1
+-- (Exemplo 1) Identifique qual é o gênero mais frequente nos clientes que compraram
 -- automóveis no site. Obs: Utilizar a tabela temp_tables.ibge_genders
-select * from temp_tables.ibge_genders limit 10;
+SELECT * FROM temp_tables.ibge_genders LIMIT 10;
+
+SELECT cus.professional_status,
+       COUNT(fun.paid_date) AS pagamentos
+FROM sales.funnel AS fun
+LEFT JOIN sales.customers AS cus
+    ON fun.customer_id = cus.customer_id
+GROUP BY cus.professional_status
+ORDER BY pagamentos DESC;
+
 
 -- (Exemplo 2) Identifique de quais regiões são os clientes que mais visitam o site
 -- Obs: Utilizar a tabela temp_tables.regions
-select * from sales.customers limit 10;
-select * from temp_tables.regions limit 10;
+SELECT * FROM temp_tables.ibge_genders LIMIT 10;
+
+SELECT ibge.gender,
+       COUNT(fun.paid_date)
+FROM sales.funnel AS fun
+LEFT JOIN sales .customers AS cus
+ON fun.customer_id = cus.customer_id
+LEFT JOIN temp_tables.ibge_genders AS ibge
+ON LOWER(cus.first_name) = ibge.first_name
+GROUP BY ibge.gender;
+
+
+-- (Exemplo 3) Identifique de quais regiões são os clientes que mais visitam o site 
+-- obs: Utilizar a tabela temp_tables.regions
+SELECT * FROM sales.customers LIMIT 10;
+SELECT * FROM temp_tables.regions LIMIT 10;
+
+SELECT reg.region,
+    COUNT(fun.visit_page_date) AS visitas
+FROM sales.funnel AS fun
+LEFT JOIN sales.customers AS cus
+    ON fun.customer_id = cus.customer_id
+LEFT JOIN temp_tables.regions AS reg 
+    ON LOWER(cus.city) = LOWER(reg.city) AND LOWER(cus.state) = LOWER(reg.state)
+GROUP BY reg.region
+ORDER BY visitas DESC;
 
 
 --------------------------------------------26. Desafio-------------------------------------
 -- EXERCÍCIOS ########################################################################
 -- (Exercício 1) Identifique quais as marcas de veículo mais visitada na tabela sales.funnel
+SELECT pro.brand,
+	   COUNT(*) AS visitas
+FROM sales.funnel AS fun
+LEFT JOIN sales.products AS pro
+	ON fun.product_id = pro.product_id
+GROUP BY pro.brand
+ORDER BY visitas DESC;
 
 
 -- (Exercício 2) Identifique quais as lojas de veículo mais visitadas na tabela sales.funnel
-
+SELECT sto.store_name,
+	   COUNT(*) AS visitas
+FROM sales.funnel AS fun
+LEFT JOIN sales.stores AS sto
+	ON fun.store_id = sto.store_id
+GROUP BY sto.store_name
+ORDER BY visitas DESC;
 
 -- (Exercício 3) Identifique quantos clientes moram em cada tamanho de cidade (o porte da cidade
 -- consta na coluna "size" da tabela temp_tables.regions)
+SELECT
+	reg.size,
+	COUNT(*) AS contagem
+FROM sales.customers AS cus
+LEFT JOIN temp_tables.regions AS reg
+	ON LOWER(cus.city) = lower(reg.city) AND LOWER(cus.state) = LOWER(reg.state)
+GROUP BY reg.size
+ORDER BY contagem;
+
+
 
 
