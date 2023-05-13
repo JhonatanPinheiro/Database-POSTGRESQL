@@ -800,3 +800,13 @@ SELECT column1, column2, ... FROM table1
 UNION ALL
 SELECT column1, column2, ... FROM table2
 
+--------------------------------------------29. Exemplos-------------------------------------
+-- (Exemplo 1) União simples de duas tabelas 
+-- Uma tabela sales.products com a tabela temp_tables.products_2
+
+SELECT * FROM sales.products;
+SELECT * FROM  temp_table.products_2;
+
+SELECT * FROM sales.products
+UNION ALL
+SELECT * FROM  temp_tables.products_2;
