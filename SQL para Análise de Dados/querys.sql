@@ -813,3 +813,82 @@ SELECT * FROM  temp_tables.products_2;
 
 
 --------------------------------------------30. Tipos de Subquery-------------------------------------
+-- PARA QUE SERVE 
+-- Servem para consultar dados de outras consultas
+
+-- TIPOS
+-- Subquery no WHERE 
+-- Subquery com WITH
+-- Subquery no FROM
+-- Subquery no SELECT
+
+-- EXEMPLOS 
+-- (Exemplo 1) Subquery no WHERE
+-- Informe qual é o veículo mais barato da tabela products
+SELECT *
+FROM sales.products
+WHERE price = (SELECT MIN(price) FROM sales.products);
+
+SELECT MIN(price) FROM sales.products;
+
+-- (EXEMPLO 2) Subquery com WITH
+-- Calcular a idade média dos clientes por status profissional
+-- Utilizamos o if para podermos fazer como se fosse um group by com utilizando uma funções de agregacões.Mas devemos sempre utlizar duas colunas/mesma QTD
+
+--(ETAPA 1)
+SELECT professional_status,
+       (current_date - birth_date)/365 AS idade
+FROM sales.customers;
+
+--(ETAPA 2) Essa etapa eu montei uma nova "tabela" para poder deixar no jeito para colocar dentro do WITH. Esse comando executado sozinho não funciona
+SELECT professional_status,
+       AVG(idade) AS Idade Media
+FROM alguma_tabela
+GROUP BY professional_status;
+
+
+--(ETAPA 3)
+WITH alguma_tabela AS(
+SELECT professional_status,
+       (CURRENT_DATE - birth_date)/365 AS idade
+FROM sales.customers
+)
+SELECT professional_status,
+       AVG(idade) AS idade_media
+FROM alguma_tabela
+GROUP BY professional_status;
+--Obs: O comando WITH conseguimos utilizar os resultados de uma subquery em uma query que foi escrita posteriomente
+-- Comando WITH é muito utilizado em  análise de dados 
+
+
+-- (EXEMPLO 3) Subquery no FROM
+-- Calcule a idades  media dos clientes por status profissional
+SELECT
+    professional_status, 
+    AVG(idade) AS idade_media
+FROM (
+    SELECT 
+    professional_status,
+    (CURRENT_DATE - birth_date)/365 AS idade
+    FROM sales.customers
+) AS alguma_tabela
+GROUP BY professional_status;
+-- Tem a mesma função do WITH porém não é aconselhado fazer dessa forma. Com WITH fica muito mais legível
+
+
+-- (EXEMPLO 4) Subquery no SELECT
+-- Na tabela sales.funnel crie uma coluna que informe o nº de visitas acumuladas
+-- que a loja visitada recebeu até o momento
+SELECT 
+    fun.visit_id, -- Coluna que identifica a visita
+    fun.visit_page_date, -- Coluna que informa a data que foi feita essa vísita
+    sto.store_name, -- Coluna que informa o nome da loja que está sendo visitada 
+    ( SELECT COUNT(*) -- Dentro dessa subquery estarei trazendo uma coluna que me informa quantas visitas a loja recebeu até a data daquela visit_page_date 
+        FROM sales.funnel AS fun2
+        WHERE fun2.visit_page_date  <= visit_page_date -- Só irei contar as linhas da tabela sales.funnel cuja a data da visita  <= a data da visita atual 
+        AND fun2.store_id = fun.store_id -- E essa contagem vai ser apenas por loja
+    ) AS visitas_acumuladas
+FROM sales.funnel AS fun
+LEFT JOIN sales.stores AS sto -- Para pegar o nome da loja
+    ON fun.store_id = sto.store_id
+ORDER BY sto.store_name, fun.visit_page_date;
