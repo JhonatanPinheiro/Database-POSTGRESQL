@@ -891,4 +891,9 @@ SELECT
 FROM sales.funnel AS fun
 LEFT JOIN sales.stores AS sto -- Para pegar o nome da loja
     ON fun.store_id = sto.store_id
-ORDER BY sto.store_name, fun.visit_page_date;
+ORDER BY sto.store_name, fun.visit_page_date;`
+
+-- RESUMO 
+-- (1) Servem para consultar dados de outros consultados.
+-- (2) Para que as subqueries no WHERE e no SELECT funcionem, elas devem retornar apenas um único valor
+-- (3) Não é recomendado utilizar subqueries diretamente dentro do FROM pois isso dificuta a legibilidade da query
