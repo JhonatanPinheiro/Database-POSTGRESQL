@@ -942,3 +942,30 @@ LEFT JOIN sales.products AS pro
     ON fun.product_id = pro.product_id
 LEFT JOIN preco_medio
     ON pro.brand = preco_medio.brand
+
+
+
+ --------------------------------------------SEÇÃO 9 - TRAYAMENTO DE DADOS -------------------------------------
+    --33. Guia de comandos
+-------------------------------------------- 34. Conversão de unidades ----------------------------------------
+    
+--(EXEMPLO 1) Conversão de texto em data
+-- Corrija a query abaixo utilizando o operador ::
+    SELECT '2021-10-01'::date - '2021-02-01'::date;
+
+-- (Exemplo 2 ) Conversão de texto em número
+-- Corrija a query abaixo utilizando o operador ::
+SELECT '100'::numeric - '10'::numeric;
+
+
+-- (Exemplo 3) Conversão de número em texto
+-- Corrija a query abaixo utilizado o operador :: 
+SELECT REPLACE(112122::text,'1','A')
+
+-- (Exemplo 4) Conversão de texto em data
+-- Corrija a query abaixo utilizando a função CAST
+SELECT CAST('2021-10-01' AS date) - CAST('2021-02-01' AS date);
+
+
+
+
