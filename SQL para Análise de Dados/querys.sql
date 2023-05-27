@@ -967,5 +967,11 @@ SELECT REPLACE(112122::text,'1','A')
 SELECT CAST('2021-10-01' AS date) - CAST('2021-02-01' AS date);
 
 
+-- RESUMO
+-- (1) O perador :: e o CAST() são funções utilizadas para converter um dado para a unidade desejada.
+-- (2) O operador :: é mais "clean", porém, em algumas ocasiões não funciona, sendo necessário utilizar a função CAST()
+-- (3) Use o Guia de comandos para consultar a lista de unidades mais utilizadas 
+
+
 
 
