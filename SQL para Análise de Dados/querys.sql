@@ -973,5 +973,49 @@ SELECT CAST('2021-10-01' AS date) - CAST('2021-02-01' AS date);
 -- (3) Use o Guia de comandos para consultar a lista de unidades mais utilizadas 
 
 
+-------------------------------------------- 35. Tratamento Geral ----------------------------------------
+-- (Exemplo 1) Agrupamento de dados com CASE WHEN
+-- Calcule o nº de clientes que ganham abaixo de 5K, entre 5k e 10k, entre 10k e 15k e Acima de 15K
+
+WITH faixa_de_renda AS(
+    SELECT income,
+    CASE
+        WHEN income < 5000 THEN 'R$ 0 - 5000'
+        WHEN income >= 5000 AND income < 10000 THEN 'R$ 5000-10000'
+        WHEN income >= 10000 AND income < 15000 THEN 'R$ 10000-15000'
+        ELSE 'R$ 15000+'
+        END AS faixa_de_renda
+    FROM sales.customers
+)
+SELECT faixa_de_renda, COUNT(*)
+FROM faixa_de_renda
+GROUP BY faixa_de_renda;
 
 
+-- (Exemplo 2) Tratamento de dados nulos com COALESCE
+-- Crie uma coluna chamada população chamada populacao_ajustada na tabela temp_tables.regions e 
+-- preencha com os dados da coluna population, mas caso esse campo estiver nulo,
+-- preencha com a população média (geral) das cidades do Brasil
+
+
+SELECT *,
+    CASE 
+        -- Caso a seja a população seja NULL ele vai trazer a população 
+        WHEN population  IS NOT NULL THEN population
+        -- Caso Não seja NULL ele vai trazer a média da população
+        ELSE (SELECT AVG(population) FROM temp_tables.regions)
+        END AS populacao_ajustada -- Fecho meu CASE WHEN e chamado de populacao_ajustada
+
+FROM temp_tables.regions
+
+-- Para melhor entendimento 
+
+SELECT *,
+    CASE 
+        -- Caso a seja a população seja NULL ele vai trazer VALOR VAZIO 
+        WHEN population  IS NOT NULL THEN 'VALOR VAZIO'
+        -- Caso Não seja NULL ele vai trazer a média da população
+        ELSE (SELECT AVG(population) FROM temp_tables.regions)
+        END AS populacao_ajustada -- Fecho meu CASE WHEN e chamado de populacao_ajustada
+
+FROM temp_tables.regions
