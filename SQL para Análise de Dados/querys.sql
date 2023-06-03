@@ -1014,7 +1014,7 @@ SELECT
      *,
      COALESCE(population, (SELECT AVG(population) FROM temp_tables.regions)) AS populacao_ajustada
 FROM temp_tables.regions
-WHERE population IS NULL;
+
 -- O comando COALESCE ele verifica qual é o primeiro campo não NULL de uma lista valores
 -- Nesse caso ele pegou do campo population
 -- Por exemplo se estiver null no campo population ele mostrará nesse campo a media(AVG) ao contrario preencherá com o valores da population
@@ -1022,5 +1022,36 @@ WHERE population IS NULL;
 -- RESUMO
 -- (1) CASE WHEN é o comando utilizado para criar respostas específicas para diferentes condições e é muito utilizado para fazer agrupamento de dados]
 -- (2) COALESCE  é o comando utilizado para preencher campos nulos com o primeiro valor não nulo de uma sequência de valores
+
+
+------------------------------------ 36. Tratamento de texto -------------------------------------
+-- TIPOS:
+-- LOWER()
+-- UPPER()
+-- TRIM()
+-- REPLACE()
+
+-- EXEMPLOS 
+
+-- (Exemplo 1) Corrija o primeiro elemento das queries abaixo utilizando os comandos de tratamento de texto para que o resultado seja sempre TRUE
+
+SELECT 'São Paulo' = 'SAO PAULO' -- RETORNA FALSE
+SELECT UPPER('São Paulo') = 'SAO PAULO' -- RETORNA TRUE
+
+SELECT 'São Paulo' = 'são paulo' -- RETORNA FALSE
+SELECT LOWER('São Paulo') = 'são paulo' -- RETORNA TRUE
+
+SELECT 'SÃO PAULO       '  = 'SÃO PAULO' -- RETORNA FALSE
+SELECT TRIM('SÃO PAULO       ')  = 'SÃO PAULO' -- RETORNA TRUE
+
+SELECT 'SAO PAULO' = 'SÃO PAULO' -- RETORNA FALSE
+SELECT REPLACE('SAO PAULO','SAO', 'SÃO') = 'SÃO PAULO'  -- RETORNA TRUE
+
+-- RESUMO
+-- (1) LOWER() é utilizado para transformar todo texto em letras minúsculas
+-- (2) UPPER() é utilizado para transformar todo o texto em letras maiúsculas
+-- (3) TRIM() é utilizado para remover os espaços das extremidades de um texto
+-- (4) REPLACE() é utilizado para substituir uma string por outra string
+
 
 
