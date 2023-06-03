@@ -1149,13 +1149,31 @@ SELECT DATEDIFF('weeks','2018-06-01', current_date);
 -- uma transformação de unidades (ou criar uma função para isso)
 -- (6) Utilize o Guia de comandos para consultar as unidades de data e hora utilizadas no SQL
 
+------------------------------------  38. Funções  -------------------------------------
+-- Criando função
+CREATE FUNCTION datediff(unidade varchar,data_inicial date,data_final date) -- 1 linha criamos uma função, demos nomes a ela e definimos quais são as variaveis de entrada
+-- 2 linha, iremos definir qual é a unidade da variavel ou das variaveis de saída
+ RETURNS integer
+ -- 3 linhas devemos informa qual linguagem a gente quer que essa função seja lida 
+ LANGUAGE SQL
+ 
+ AS
+ $$
+    SELECT
+        CASE 
+            WHEN unidade IN('d','day','days') THEN (data_final - data_inicial)
+            WHEN unidade IN('w','week','weeks') THEN (data_final - data_inicial)/7
+            WHEN unidade IN('m','month','months') THEN (data_final - data_inicial)/30
+            WHEN unidade IN('y','year','years') THEN (data_final - data_inicial)/365
+        END AS diferenca
+ $$
 
 
-
-
-
-
-
+-- Chamando a função criada/utilizando
+SELECT DATEDIFF('day','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_DAY
+SELECT DATEDIFF('week','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_SEMANA
+SELECT DATEDIFF('month','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_MES
+SELECT DATEDIFF('year','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_ANO
 
 
 
