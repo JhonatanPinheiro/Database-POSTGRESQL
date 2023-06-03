@@ -1006,14 +1006,14 @@ SELECT *,
         ELSE (SELECT AVG(population) FROM temp_tables.regions)
         END AS populacao_ajustada -- Fecho meu CASE WHEN e chamado de populacao_ajustada
 
-FROM temp_tables.regions
+FROM temp_tables.regions;
 
 
 -- OPÇÃO 2
 SELECT 
      *,
      COALESCE(population, (SELECT AVG(population) FROM temp_tables.regions)) AS populacao_ajustada
-FROM temp_tables.regions
+FROM temp_tables.regions;
 
 -- O comando COALESCE ele verifica qual é o primeiro campo não NULL de uma lista valores
 -- Nesse caso ele pegou do campo population
@@ -1035,17 +1035,17 @@ FROM temp_tables.regions
 
 -- (Exemplo 1) Corrija o primeiro elemento das queries abaixo utilizando os comandos de tratamento de texto para que o resultado seja sempre TRUE
 
-SELECT 'São Paulo' = 'SAO PAULO' -- RETORNA FALSE
-SELECT UPPER('São Paulo') = 'SAO PAULO' -- RETORNA TRUE
+SELECT 'São Paulo' = 'SAO PAULO'; -- RETORNA FALSE
+SELECT UPPER('São Paulo') = 'SAO PAULO'; -- RETORNA TRUE
 
 SELECT 'São Paulo' = 'são paulo' -- RETORNA FALSE
-SELECT LOWER('São Paulo') = 'são paulo' -- RETORNA TRUE
+SELECT LOWER('São Paulo') = 'são paulo'; -- RETORNA TRUE
 
-SELECT 'SÃO PAULO       '  = 'SÃO PAULO' -- RETORNA FALSE
-SELECT TRIM('SÃO PAULO       ')  = 'SÃO PAULO' -- RETORNA TRUE
+SELECT 'SÃO PAULO       '  = 'SÃO PAULO'; -- RETORNA FALSE
+SELECT TRIM('SÃO PAULO       ')  = 'SÃO PAULO'; -- RETORNA TRUE
 
 SELECT 'SAO PAULO' = 'SÃO PAULO' -- RETORNA FALSE
-SELECT REPLACE('SAO PAULO','SAO', 'SÃO') = 'SÃO PAULO'  -- RETORNA TRUE
+SELECT REPLACE('SAO PAULO','SAO', 'SÃO') = 'SÃO PAULO';  -- RETORNA TRUE
 
 -- RESUMO
 -- (1) LOWER() é utilizado para transformar todo texto em letras minúsculas
@@ -1055,4 +1055,93 @@ SELECT REPLACE('SAO PAULO','SAO', 'SÃO') = 'SÃO PAULO'  -- RETORNA TRUE
 
 
 
------------------------------------- 36. Tratamento de datas -------------------------------------
+------------------------------------   -------------------------------------
+-- (EXEMPLO 1) Soma de datas utilizando INTERVAL
+-- Calcule a data de hoje mais 10 unidades (dias, semanas, meses, horas)
+
+SELECT CURRENT_DATE + 10; -- Pegará a data do seu computador/servidor e  colorá 10 dias a mais. Por exemplo: Se hoje é 2023-04-10 mostrará 2023-04-23 
+
+SELECT (CURRENT_DATE + interval '10 weeks')::date;  -- Apenas mostrará a data com acrescimo de 10 semanas
+SELECT (CURRENT_DATE + interval '10 months')::date;  -- Apenas mostrará a data com acrescimo de 10 meses
+SELECT (CURRENT_DATE + interval '10 weeks');  -- Mostrará data e hora
+
+
+
+-- (EXEMPLO 2) Truncagem de datas utilizando DATE_TRUNC
+-- Calcule quantas visitas ocorreram por mês no site da empresa
+SELECT visit_page_date, COUNT(*)
+FROM sales.funnel
+GROUP BY visit_page_date
+ORDER BY visit_page_date DESC;
+
+
+-- Quando eu utilizo a função date_trunc(PARAMETRO1(mouth),PARAMETRO2(campo)) -> Essa query ela irá pegar todos os meses que estão com dias variaveis (2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30 ou 31) e colocar de referencia para o dia 1
+-- Porque, quando fazemos dessa forma reduzimos a granualidade dos resultados, Para calcular quantas visitas o site teve por mes e não por dia 
+SELECT visit_page_date,
+       date_trunc('month',visit_page_date)
+FROM sales.funnel;
+
+
+SELECT date_trunc('month',visit_page_date) AS visit_page_month,
+       COUNT(*)
+FROM sales.funnel
+GROUP BY visit_page_month
+ORDER BY visit_page_month DESC;
+
+
+
+-- (EXEMPLO 3) Extração de unidades de uma data utilizando EXTRACT
+-- Calculando qual é o dia da semana que mais recebe visitas ao site
+
+SELECT 
+    '2022-01-30'::DATE,
+    EXTRACT('dow' from '2022-01-30'::DATE);
+-- Nesse caso o retorno foi 0, pois se pegarmos o calendario e verificar no computador seguirá essa sequencia.
+-- Como funciona o retorno dessa query
+-- 0 = DOMINGO
+-- 1 = SEGUNDA
+-- 2 = TERÇA
+-- 3 = QUARTA
+-- 4 = QUINTA
+-- 5 = SEXTA
+-- 6 = SÁBADO
+
+--DOW   ->  Day On Week
+SELECT 
+    NOW()::DATE,
+    EXTRACT('dow' from '2022-01-30'::DATE);
+
+SELECT 
+    CURRENT_DATE,
+    EXTRACT ('dow' from CURRENT_DATE);
+
+
+SELECT 
+    EXTRACT('dow' FROM visit_page_date)
+FROM sales.funnel
+
+-- Calculando qual é o dia da semana que mais recebe visitas ao site
+SELECT 
+    EXTRACT('dow' FROM visit_page_date) AS DIA_DA_SEMANA,
+	COUNT(*)
+FROM sales.funnel
+GROUP BY DIA_DA_SEMANA
+ORDER BY DIA_DA_SEMANA;
+
+
+-- (EXEMPLO 4) Diferença entre datas com operador de subtração (-)
+-- Calcule a diferença entre hoje e '2018-06-01', em dias, semanas, meses e anos
+
+SELECT (CURRENT_DATE - '2018-06-01'::DATE)
+
+
+
+
+
+
+
+
+
+
+
+
