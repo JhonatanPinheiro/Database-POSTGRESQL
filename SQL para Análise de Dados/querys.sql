@@ -1055,7 +1055,7 @@ SELECT REPLACE('SAO PAULO','SAO', 'SÃO') = 'SÃO PAULO';  -- RETORNA TRUE
 
 
 
-------------------------------------   -------------------------------------
+------------------------------------  37. Tratamento de datas  -------------------------------------
 -- (EXEMPLO 1) Soma de datas utilizando INTERVAL
 -- Calcule a data de hoje mais 10 unidades (dias, semanas, meses, horas)
 
@@ -1132,7 +1132,22 @@ ORDER BY DIA_DA_SEMANA;
 -- (EXEMPLO 4) Diferença entre datas com operador de subtração (-)
 -- Calcule a diferença entre hoje e '2018-06-01', em dias, semanas, meses e anos
 
-SELECT (CURRENT_DATE - '2018-06-01'::DATE)
+SELECT (CURRENT_DATE - '2018-06-01') AS RESULTADO_EM_DIAS,
+	   (CURRENT_DATE - '2018-06-01')/7 AS RESULTADO_EM_SEMANAS,
+	   (CURRENT_DATE - '2018-06-01')/30 AS RESULTADO_EM_MESES,
+	   (CURRENT_DATE - '2018-06-01')/365 AS RESULTADO_EM_ANOS
+	   
+-- Lebrando que em outros banco existe uma função chamado DATEDIFF, porém essa função não funcio no POSTGREE
+SELECT DATEDIFF('weeks','2018-06-01', current_date);
+	   
+-- RESUMO 
+-- (1) O comando INTERVAL é utilizado para somar datas na unidade desejada. Caso a unidade não seja desejada. Caso
+-- a unidade não seja informada, o SQL irá entender que a soma foi feita em dias.
+-- (2) O comando DATE_TRUNC é utilizado para truncar uma data no início do período
+-- (3) O comando EXTRACT é utilizado para extrair unidades de uma data/timestamp
+-- (4) O cálculo da diferença entre as datas em outra unidade é necessário fazer 
+-- uma transformação de unidades (ou criar uma função para isso)
+-- (6) Utilize o Guia de comandos para consultar as unidades de data e hora utilizadas no SQL
 
 
 
