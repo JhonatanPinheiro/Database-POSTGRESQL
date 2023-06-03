@@ -1008,14 +1008,19 @@ SELECT *,
 
 FROM temp_tables.regions
 
--- Para melhor entendimento 
 
-SELECT *,
-    CASE 
-        -- Caso a seja a população seja NULL ele vai trazer VALOR VAZIO 
-        WHEN population  IS NOT NULL THEN 'VALOR VAZIO'
-        -- Caso Não seja NULL ele vai trazer a média da população
-        ELSE (SELECT AVG(population) FROM temp_tables.regions)
-        END AS populacao_ajustada -- Fecho meu CASE WHEN e chamado de populacao_ajustada
-
+-- OPÇÃO 2
+SELECT 
+     *,
+     COALESCE(population, (SELECT AVG(population) FROM temp_tables.regions)) AS populacao_ajustada
 FROM temp_tables.regions
+WHERE population IS NULL;
+-- O comando COALESCE ele verifica qual é o primeiro campo não NULL de uma lista valores
+-- Nesse caso ele pegou do campo population
+-- Por exemplo se estiver null no campo population ele mostrará nesse campo a media(AVG) ao contrario preencherá com o valores da population
+
+-- RESUMO
+-- (1) CASE WHEN é o comando utilizado para criar respostas específicas para diferentes condições e é muito utilizado para fazer agrupamento de dados]
+-- (2) COALESCE  é o comando utilizado para preencher campos nulos com o primeiro valor não nulo de uma sequência de valores
+
+
