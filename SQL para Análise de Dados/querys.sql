@@ -1187,3 +1187,7 @@ DROP FUNCTION datediff;
 -- (3) O script da função deve estar delimitado por $$
 -- (4) Para deletar uma função utiliza-se o comando DROP NOME_DA_FUNCAO_QUE_FOI_CRIADA
 
+
+
+-- SEÇÃO 10: Manipulação de tabelas
+------------------------------------  39. Tabelas - Criação e deleçãos  -------------------------------------
