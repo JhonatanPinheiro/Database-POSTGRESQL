@@ -1171,10 +1171,19 @@ CREATE FUNCTION datediff(unidade varchar,data_inicial date,data_final date) -- 1
 
 -- Chamando a função criada/utilizando
 SELECT DATEDIFF('day','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_DAY
-SELECT DATEDIFF('week','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_SEMANA
-SELECT DATEDIFF('month','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_MES
-SELECT DATEDIFF('year','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_ANO
+SELECT DATEDIFF('week','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_SEMANA;
+SELECT DATEDIFF('month','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_MES;
+SELECT DATEDIFF('year','2021-06-01', CURRENT_DATE) AS DIFERANCA_EM_ANO;
+
+
+-- (EXEMPLO 2) Delete a função DATEDIFF criada no exercício anterior
+DROP FUNCTION datediff;
 
 
 
+-- RESUMO
+-- (1) Para criar funções, utiliza-se o comando CREATE FUNCTION
+-- (2) Para que o comando funcione é obrigatório informar (a) quais as unidades dos INPUTS (b) quais as unidades dos OUTPUTS e (c) em qual linguagem a função será escrita
+-- (3) O script da função deve estar delimitado por $$
+-- (4) Para deletar uma função utiliza-se o comando DROP NOME_DA_FUNCAO_QUE_FOI_CRIADA
 
