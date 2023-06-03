@@ -1055,3 +1055,4 @@ SELECT REPLACE('SAO PAULO','SAO', 'SÃO') = 'SÃO PAULO'  -- RETORNA TRUE
 
 
 
+------------------------------------ 36. Tratamento de datas -------------------------------------
